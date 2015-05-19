@@ -69,6 +69,14 @@
     <developerConnection>scm:git:git@github.com:AlexAbak/java_drush.git</developerConnection>
   </scm>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>3.0.22</version>
+    </dependency>
+  </dependencies>
+
   <build>
 
     <plugins>
