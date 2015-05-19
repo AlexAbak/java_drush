@@ -40,14 +40,87 @@
 
 package ru.myweek_end.drush.executor;
 
+import java.io.File;
+import java.net.URI;
+import java.nio.file.Path;
+
 /**
  * Исполнитель Drush.
  * 
  * @author <a href="https://myweek-end.ru/">Моя неделя завершилась</a>
  * @author <a href="mailto:drum@pisem.net">Алексей Кляузер</a>
  * @since 0.0.1.2
- * @version 0.0.1.2
+ * @version 0.0.1.4
  */
 public class Executor {
+
+  /**
+   * Вывод отладочной информации.
+   * 
+   * @since 0.0.1.4
+   */
+  private boolean debug;
+
+  /**
+   * Отвечать "нет" на все вопросы.
+   * 
+   * @since 0.0.1.4
+   */
+  private boolean no;
+
+  /**
+   * Отвечать "да" на все вопросы.
+   * 
+   * @since 0.0.1.4
+   */
+  private boolean yes;
+
+  /**
+   * Корневая директория Drupal.
+   * 
+   * @since 0.0.1.4
+   */
+  private Path root;
+
+  /**
+   * Симулировать все действия не внося изменений.
+   * 
+   * @since 0.0.1.4
+   */
+  private boolean simulate;
+
+  /**
+   * Uri Drupal сайта.
+   * Используется при мультисайтинге или нестандартных портах.
+   * 
+   * @since 0.0.1.4
+   */
+  private URI uri;
+
+  /**
+   * Путь к корню Drush.
+   *
+   * @since 0.0.1.4
+   */
+  private File drushBin;
+
+  /**
+   * Получить путь к корню Drush.
+   * 
+   * @since 0.0.1.4
+   * @return Путь к корню Drush.
+   */
+  public final File getDrushBin() {
+    return this.drushBin;
+  }
+
+  /**
+   * Конструктор.
+   *
+   * @param drushBin Путь к корню Drush.
+   */
+  public Executor(final File drushBin) {
+    this.drushBin = drushBin;
+  }
 
 }
