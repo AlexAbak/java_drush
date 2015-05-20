@@ -70,6 +70,24 @@ public class DownloaderIntegration {
   private Downloader downloader;
 
   /**
+   * Очистка каталога.
+   *
+   * @since 0.0.1.6
+   * @throws Exception
+   *           при проблемах очистки
+   */
+  public final void erase(final File dir) {
+    if (dir.exists() && dir.isDirectory()) {
+      for (File item : dir.listFiles()) {
+        if (item.isDirectory()) {
+          erase(item);
+        }
+        item.delete();
+      }
+    }
+  }
+
+  /**
    * Настройка теста.
    *
    * @since 0.0.1.3
@@ -81,10 +99,13 @@ public class DownloaderIntegration {
     this.downloader = new Downloader();
   }
 
+  private File expected = new File(System.getProperty("user.home")).toPath()
+      .resolve(".java_drush/repository/drush-6.6.0").toFile();
+
   /**
    * Тестировать полный цикл
    *
-   * @since 0.0.1.3
+   * @since 0.0.1.6
    * @throws DownloaderException
    * @throws ZipException
    *           при проблемах с архивом
@@ -95,10 +116,53 @@ public class DownloaderIntegration {
    *           {@link ru.myweek_end.drush.downloader.Downloader#drushBin(java.lang.String)}
    */
   @Test
-  public void testDrushBin() throws ZipException, IOException, DownloaderException {
+  public void testDrushBin0() throws ZipException, IOException, DownloaderException {
     File bin = this.downloader.drushBin("6.6.0");
-    File expected = new File(System.getProperty("user.home")).toPath()
-        .resolve(".java_drush/repository/drush-6.6.0").toFile();
+    erase(this.downloader.getLocalRepository().resolve("drush-6.6.0").toFile());
+    this.downloader.getLocalRepository().resolve("drush-6.6.0").toFile().delete();
+    this.downloader.getLocalCache().resolve("drush-6.6.0.zip").toFile().delete();
+    bin = this.downloader.drushBin("6.6.0");
+    assertEquals(expected, bin);
+  }
+
+  /**
+   * Тестировать распаковку
+   *
+   * @since 0.0.1.6
+   * @throws DownloaderException
+   * @throws ZipException
+   *           при проблемах с архивом
+   * @throws IOException
+   *           при проблемах с файловой системой
+   * @throws DownloaderException
+   *           при общих проблемах скачивания Test method for
+   *           {@link ru.myweek_end.drush.downloader.Downloader#drushBin(java.lang.String)}
+   */
+  @Test
+  public void testDrushBin1() throws ZipException, IOException, DownloaderException {
+    File bin = this.downloader.drushBin("6.6.0");
+    this.downloader.getLocalCache().resolve("drush-6.6.0.zip").toFile().delete();
+    bin = this.downloader.drushBin("6.6.0");
+    assertEquals(expected, bin);
+  }
+
+  /**
+   * Тестировать возврат
+   *
+   * @since 0.0.1.6
+   * @throws DownloaderException
+   * @throws ZipException
+   *           при проблемах с архивом
+   * @throws IOException
+   *           при проблемах с файловой системой
+   * @throws DownloaderException
+   *           при общих проблемах скачивания Test method for
+   *           {@link ru.myweek_end.drush.downloader.Downloader#drushBin(java.lang.String)}
+   */
+  @Test
+  public void testDrushBin2() throws ZipException, IOException, DownloaderException {
+    File bin = this.downloader.drushBin("6.6.0");
+    bin = this.downloader.drushBin("6.6.0");
     assertEquals(expected, bin);
   }
 
