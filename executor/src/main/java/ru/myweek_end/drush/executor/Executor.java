@@ -90,8 +90,7 @@ public class Executor {
   private boolean simulate;
 
   /**
-   * Uri Drupal сайта.
-   * Используется при мультисайтинге или нестандартных портах.
+   * Uri Drupal сайта. Используется при мультисайтинге или нестандартных портах.
    * 
    * @since 0.0.1.4
    */
@@ -103,6 +102,13 @@ public class Executor {
    * @since 0.0.1.4
    */
   private File drushBin;
+
+  /**
+   * Путь к запускаемому файлу Drush.
+   *
+   * @since 0.0.1.4
+   */
+  private File drushExe;
 
   /**
    * Получить путь к корню Drush.
@@ -117,10 +123,40 @@ public class Executor {
   /**
    * Конструктор.
    *
-   * @param drushBin Путь к корню Drush.
+   * @param drushBin
+   *          Путь к корню Drush.
    */
   public Executor(final File drushBin) {
     this.drushBin = drushBin;
+    if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
+      drushExe = drushBin.toPath().resolve("drush.bat").toFile();
+    } else {
+      drushExe = drushBin.toPath().resolve("drush").toFile();
+    }
+  }
+
+  public ProcessBuilder initProcessBuilder() {
+    ProcessBuilder processBuilder;
+    processBuilder = new ProcessBuilder(this.drushExe.toString());
+    if (this.debug) {
+      processBuilder.command().add("--debug");
+    }
+    if (this.no) {
+      processBuilder.command().add("--no");
+    }
+    if (this.yes) {
+      processBuilder.command().add("--yes");
+    }
+    if (!"".equals(this.root)) {
+      processBuilder.command().add("--root=" + this.root);
+    }
+    if (this.simulate) {
+      processBuilder.command().add("--simulate");
+    }
+    if (null != this.uri) {
+      processBuilder.command().add("--uri=" + this.uri);
+    }
+    return processBuilder;
   }
 
 }
