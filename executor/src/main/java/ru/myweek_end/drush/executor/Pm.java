@@ -40,100 +40,20 @@
 
 package ru.myweek_end.drush.executor;
 
-import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
-
 /**
- * Исполнитель Drush.
+ * Набор pm команд Drush.
  * 
  * @author <a href="https://myweek-end.ru/">Моя неделя завершилась</a>
  * @author <a href="mailto:drum@pisem.net">Алексей Кляузер</a>
  * @since 0.0.1.2
  * @version 0.0.1.4
  */
-public class Executor {
+public class Pm {
 
-  /**
-   * Вывод отладочной информации.
-   * 
-   * @since 0.0.1.4
-   */
-  private boolean debug;
+  private Executor executor;
 
-  /**
-   * Отвечать "нет" на все вопросы.
-   * 
-   * @since 0.0.1.4
-   */
-  private boolean no;
-
-  /**
-   * Отвечать "да" на все вопросы.
-   * 
-   * @since 0.0.1.4
-   */
-  private boolean yes;
-
-  /**
-   * Корневая директория Drupal.
-   * 
-   * @since 0.0.1.4
-   */
-  private Path root;
-
-  /**
-   * Симулировать все действия не внося изменений.
-   * 
-   * @since 0.0.1.4
-   */
-  private boolean simulate;
-
-  /**
-   * Uri Drupal сайта. Используется при мультисайтинге или нестандартных портах.
-   * 
-   * @since 0.0.1.4
-   */
-  private URI uri;
-
-  /**
-   * Путь к корню Drush.
-   *
-   * @since 0.0.1.4
-   */
-  private File drushBin;
-
-  /**
-   * Путь к запускаемому файлу Drush.
-   *
-   * @since 0.0.1.4
-   */
-  private File drushExe;
-
-  /**
-   * Получить путь к корню Drush.
-   * 
-   * @since 0.0.1.4
-   * @return Путь к корню Drush.
-   */
-  public final File getDrushBin() {
-    return this.drushBin;
-  }
-
-  /**
-   * Конструктор.
-   *
-   * @since 0.0.1.4
-   * @param drushBin
-   *          Путь к корню Drush.
-   */
-  public Executor(final File drushBin) {
-    this.drushBin = drushBin;
-    if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
-      drushExe = drushBin.toPath().resolve("drush.bat").toFile();
-    } else {
-      drushExe = drushBin.toPath().resolve("drush").toFile();
-    }
+  public Pm(Executor executor) {
+    this.executor = executor;
   }
 
   /**
@@ -143,33 +63,7 @@ public class Executor {
    * @return Заготовка процесса
    */
   public ProcessBuilder initProcessBuilder() {
-    ProcessBuilder processBuilder;
-    processBuilder = new ProcessBuilder(this.drushExe.toString());
-    if (this.debug) {
-      processBuilder.command().add("--debug");
-    }
-    if (this.no) {
-      processBuilder.command().add("--no");
-    }
-    if (this.yes) {
-      processBuilder.command().add("--yes");
-    }
-    if (!"".equals(this.root)) {
-      processBuilder.command().add("--root=" + this.root);
-    }
-    if (this.simulate) {
-      processBuilder.command().add("--simulate");
-    }
-    if (null != this.uri) {
-      processBuilder.command().add("--uri=" + this.uri);
-    }
-    return processBuilder;
-  }
-
-  private Pm pm = new Pm(this);
-
-  public Pm pm() {
-    return this.pm;
+    return this.executor.initProcessBuilder();
   }
 
 }
