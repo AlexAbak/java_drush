@@ -38,32 +38,12 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package ru.myweek_end.drush.executor;
-
 /**
- * Набор pm команд Drush.
+ * Пакет с набором команд pm.
  * 
  * @author <a href="https://myweek-end.ru/">Моя неделя завершилась</a>
  * @author <a href="mailto:drum@pisem.net">Алексей Кляузер</a>
- * @since 0.0.1.2
- * @version 0.0.1.4
+ * @since 0.0.1.8
+ * @version 0.0.1.8
  */
-public class Pm {
-
-  private Executor executor;
-
-  public Pm(Executor executor) {
-    this.executor = executor;
-  }
-
-  /**
-   * Подготовка заготовки процесса.
-   *
-   * @since 0.0.1.4
-   * @return Заготовка процесса
-   */
-  public ProcessBuilder initProcessBuilder() {
-    return this.executor.initProcessBuilder();
-  }
-
-}
+package ru.myweek_end.drush.executor.pm;

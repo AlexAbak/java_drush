@@ -50,9 +50,49 @@ import java.nio.file.Path;
  * @author <a href="https://myweek-end.ru/">Моя неделя завершилась</a>
  * @author <a href="mailto:drum@pisem.net">Алексей Кляузер</a>
  * @since 0.0.1.2
- * @version 0.0.1.4
+ * @version 0.0.1.8
  */
 public class Executor {
+
+  /**
+   * Путь к корню Drush.
+   *
+   * @since 0.0.1.4
+   */
+  private File drushBin;
+
+  /**
+   * Путь к запускаемому файлу Drush.
+   *
+   * @since 0.0.1.4
+   */
+  private File drushExe;
+
+  /**
+   * Получить путь к корню Drush.
+   * 
+   * @since 0.0.1.4
+   * @return Путь к корню Drush.
+   */
+  public final File getDrushBin() {
+    return this.drushBin;
+  }
+
+  /**
+   * Конструктор.
+   *
+   * @since 0.0.1.4
+   * @param drushBin
+   *          Путь к корню Drush.
+   */
+  public Executor(final File drushBin) {
+    this.drushBin = drushBin;
+    if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
+      drushExe = drushBin.toPath().resolve("drush.bat").toFile();
+    } else {
+      drushExe = drushBin.toPath().resolve("drush").toFile();
+    }
+  }
 
   /**
    * Вывод отладочной информации.
@@ -97,43 +137,63 @@ public class Executor {
   private URI uri;
 
   /**
-   * Путь к корню Drush.
+   * Установить "Вывод отладочной информации".
    *
-   * @since 0.0.1.4
+   * @since 0.0.1.8
+   * @param value Вывод отладочной информации.
    */
-  private File drushBin;
-
-  /**
-   * Путь к запускаемому файлу Drush.
-   *
-   * @since 0.0.1.4
-   */
-  private File drushExe;
-
-  /**
-   * Получить путь к корню Drush.
-   * 
-   * @since 0.0.1.4
-   * @return Путь к корню Drush.
-   */
-  public final File getDrushBin() {
-    return this.drushBin;
+  public final void setDebug(final boolean value) {
+    this.debug = value;
   }
 
   /**
-   * Конструктор.
-   *
-   * @since 0.0.1.4
-   * @param drushBin
-   *          Путь к корню Drush.
+   * Установить "Отвечать "нет" на все вопросы".
+   * 
+   * @since 0.0.1.8
+   * @param value Отвечать "нет" на все вопросы.
    */
-  public Executor(final File drushBin) {
-    this.drushBin = drushBin;
-    if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
-      drushExe = drushBin.toPath().resolve("drush.bat").toFile();
-    } else {
-      drushExe = drushBin.toPath().resolve("drush").toFile();
-    }
+  public final void setNo(final boolean value) {
+    this.no = value;
+  }
+
+  /**
+   * Установить "Отвечать "да" на все вопросы".
+   * 
+   * @since 0.0.1.8
+   * @param value Отвечать "да" на все вопросы.
+   */
+  public final void setYes(final boolean value) {
+    this.yes = value;
+  }
+
+  /**
+   * Установить "Корневая директория Drupal".
+   * 
+   * @since 0.0.1.8
+   * @param value Корневая директория Drupal.
+   */
+  public final void setRoot(final Path value) {
+    this.root = value;
+  }
+
+  /**
+   * Установить "Симулировать все действия не внося изменений".
+   * 
+   * @since 0.0.1.8
+   * @param value Симулировать все действия не внося изменений.
+   */
+  public final void setSimulate(final boolean value) {
+    this.simulate = value;
+  }
+
+  /**
+   * Установить "Uri Drupal сайта".
+   * 
+   * @since 0.0.1.8
+   * @param value Uri Drupal сайта.
+   */
+  public final void setUri(final URI value) {
+    this.uri = value;
   }
 
   /**
@@ -161,15 +221,9 @@ public class Executor {
       processBuilder.command().add("--simulate");
     }
     if (null != this.uri) {
-      processBuilder.command().add("--uri=" + this.uri);
+      processBuilder.command().add("--uri=" + this.uri.toString());
     }
     return processBuilder;
-  }
-
-  private Pm pm = new Pm(this);
-
-  public Pm pm() {
-    return this.pm;
   }
 
 }
